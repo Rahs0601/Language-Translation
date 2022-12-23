@@ -33,6 +33,7 @@ def KannadaAudioCreater(Text):
     st.audio(audio_bytes, format="audio/mp3")
     return
 
+
 def EnglishAudioCreater(Text):
     from gtts import gTTS
 
@@ -43,6 +44,7 @@ def EnglishAudioCreater(Text):
     audio_bytes = audio_file.read()
     st.audio(audio_bytes, format="audio/mp3")
     return
+
 
 def EnglishSpeaker(Text):
     import pyttsx3
