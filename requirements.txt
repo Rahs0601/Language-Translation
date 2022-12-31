@@ -1,0 +1,7 @@
+deep_translator
+gTTS
+pandas
+protobuf
+SpeechRecognition
+streamlit
+torch
