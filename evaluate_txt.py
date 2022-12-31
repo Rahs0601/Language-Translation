@@ -1,4 +1,6 @@
 
+
+# Read This ON our own risk 
 def evaluate_kan(InputText):
     from deep_translator import GoogleTranslator
 

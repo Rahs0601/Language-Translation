@@ -11,9 +11,16 @@ def main():
     st.subheader(
         "This is a demo of a speech to speech translation app using machine learning"
     )
+    st.markdown(
+        """
+        To use this app, select whether you want to input speech in English or Kannada, then click the "Start Input" button.
+        Speak into your microphone to input your speech, and the app will recognize and translate it to the other language.
+        The translated output will be played for you as audio.
+        """
+    )
 
 
-def Voice():
+def voice_capture():
     st.title("Recognizing Speech")
     with sr.Microphone() as source:
         st.write("Say something!")
@@ -22,79 +29,62 @@ def Voice():
     return audio
 
 
-def KannadaAudioCreater(Text):
+def kannada_audio_creater(text):
     from gtts import gTTS
 
     language = "kn"
-    myobj = gTTS(text=Text, lang=language, slow=False)
+    myobj = gTTS(text=text, lang=language, slow=False)
     myobj.save("Kannada.mp3")
     audio_file = open("Kannada.mp3", "rb")
     audio_bytes = audio_file.read()
     st.audio(audio_bytes, format="audio/mp3")
-    return
 
 
-def EnglishAudioCreater(Text):
+def english_audio_creater(text):
     from gtts import gTTS
 
     language = "en"
-    myobj = gTTS(text=Text, lang=language, slow=False)
+    myobj = gTTS(text=text, lang=language, slow=False)
     myobj.save("english.mp3")
     audio_file = open("english.mp3", "rb")
     audio_bytes = audio_file.read()
     st.audio(audio_bytes, format="audio/mp3")
-    return
 
 
-def EnglishSpeaker(Text):
-    import pyttsx3
-
-    engine = pyttsx3.init()
-    engine.say(Text)
-    engine.runAndWait()
-    return
-
-
-# kannada Speech to English Speech
-
-
-def KannadaInput(audio):
+def kannada_input(audio):
     try:
-        InputText = r.recognize_google(audio, language="kn-IN")
-        st.write("You said: " + "'" + InputText + "'")
+        input_text = r.recognize_google(audio, language="kn-IN")
+        st.write("You said: " + "'" + input_text + "'")
     except:
         st.write("Your Audio Wasn't Clear Plz Try again")
-    return InputText
+    return input_text
 
 
-def EnglishOutput(InputText):
+def english_output(input_text):
     import evaluate_txt as e
 
     try:
-        output = e.evaluate_eng(InputText)
+        output = e.evaluate_eng(input_text)
         st.write("Translation: " + "'" + output + "'")
     except:
         st.write("Error Occurred while Translation, Please Try Again")
     return output
 
 
-# English Speech to Kannada Speech
-
-
-def EnglishInput(audio):
+def english_input(audio):
     try:
-        InputText = r.recognize_google(audio, language="en-IN")
-        st.write("You said: " + "'" + InputText + "'")
+        input_text = r.recognize_google(audio, language="en-IN")
+        st.write("You said: " + "'" + input_text + "'")
     except:
         st.write("Your Audio Wasn't Clear Plz Try again")
-    return InputText
+    return input_text
 
 
-def KannadaOutput(InputText):
+def kannada_output(input_text):
     import evaluate_txt as e
 
     try:
-        output = e.evaluate_kan(InputText)
+        output = e.evaluate_kan(input_text)
         st.write("Translation: " + "'" + output + "'")
     except:
         st.write("Error Occurred while Translation, Please Try Again")
@@ -103,30 +93,29 @@ def KannadaOutput(InputText):
 
 if __name__ == "__main__":
     main()
-    if st.button("Show Data Set"):
-        data = pd.read_csv("eng-kannada.csv")
-        st.write("Retrieving Data Set Plz Wait...")
-        time.sleep(1)
-        st.dataframe(data)
-
-    if st.button("Kannada Input"):
-        audio = Voice()
-        st.write("Analyzing voice...")
-        kannada_input = KannadaInput(audio)
-        time.sleep(1)
-        st.write("Translating...")
-        english_output = EnglishOutput(kannada_input)
-        time.sleep(1)
-        st.write("Play this for audio...")
-        EnglishAudioCreater(english_output)
-
-    if st.button("English Input"):
-        audio = Voice()
-        st.write("Analyzing voice...")
-        english_input = EnglishInput(audio)
-        time.sleep(1)
-        st.write("Translating...")
-        kannada_output = KannadaOutput(english_input)
-        time.sleep(1)
-        st.write("Play this for audio...")
-        KannadaAudioCreater(kannada_output)
+    input_language = st.selectbox("Select Input Language", ["Kannada", "English"])
+    if st.button("Start Input"):
+        audio = voice_capture()
+        st.info("Analyzing voice...")
+    if input_language == "English":
+        try:
+            english_input = english_input(audio)
+            time.sleep(1)
+            st.info("Translating...")
+            kannada_output = kannada_output(english_input)
+            time.sleep(1)
+            st.info("Playing translated audio...")
+            kannada_audio_creater(kannada_output)
+        except:
+            pass
+    else:
+        try:
+            kannada_input = kannada_input(audio)
+            time.sleep(1)
+            st.info("Translating...")
+            english_output = english_output(kannada_input)
+            time.sleep(1)
+            st.info("Playing translated audio...")
+            english_audio_creater(english_output)
+        except:
+            pass
