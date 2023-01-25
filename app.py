@@ -104,7 +104,7 @@ if __name__ == "__main__":
             st.info("Translating...")
             kannada_output = kannada_output(english_input)
             time.sleep(1)
-            st.info("Playing translated audio...")
+            # st.info("Playing translated audio...")
             kannada_audio_creater(kannada_output)
         except:
             pass
@@ -115,7 +115,7 @@ if __name__ == "__main__":
             st.info("Translating...")
             english_output = english_output(kannada_input)
             time.sleep(1)
-            st.info("Playing translated audio...")
+            # st.info("Playing translated audio...")
             english_audio_creater(english_output)
         except:
             pass
