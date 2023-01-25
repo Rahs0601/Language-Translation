@@ -35,13 +35,6 @@ def tensorFromSentence(lang, sentence):
 
     return torch.tensor(indexes, dtype=torch.long, device=device).view(-1, 1)
 
-
-st.title("Language Translation")
-input_text = st.text_input("Enter text to translate")
-output_text = evaluate_eng(encoder, decoder, input_text)
-st.write("Translation: " + output_text)
-
-
 def evaluate_eng(encoder, decoder, sentence, max_length=15):
     with torch.no_grad():
         input_tensor = tensorFromSentence(input_lang_kan, sentence)
